@@ -1,7 +1,7 @@
 export default function App({ Component, pageProps }) {
     return (
       <>
-        <p>ayieeeee gumana sya ulit!!!!!</p>
+        <p>AYIEEEEE GUMANA SIYA ULIII!!!!!</p>
       </>
     );
   }

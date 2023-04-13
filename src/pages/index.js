@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
 import Title from '@components/title'
-import Content from '@pages/homepage'
+import Contentdaw from '@pages/homepage'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,7 +16,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Title />
+     
       <main className={styles.main}>
         <div className={styles.description}>
           <p>
@@ -41,7 +41,7 @@ export default function Home() {
             </a>
           </div>
         </div>
-
+        <Title />
         <div className={styles.center}>
           <Image
             className={styles.logo}
@@ -53,7 +53,7 @@ export default function Home() {
           />
         </div>
 
-        <Content />
+        <Contentdaw />
 
         <div className={styles.grid}>
           <a
