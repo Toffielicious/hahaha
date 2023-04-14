@@ -1,7 +1,10 @@
 export default function App({ Component, pageProps }) {
     return (
       <>
-        <p>GUMANA SIYA AYIEEEE!</p>
+      <div style={{color:'orange'}}>
+      <p>mahabang kuko</p>
+      </div>
+       
       </>
     );
   }
