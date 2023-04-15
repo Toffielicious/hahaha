@@ -9,6 +9,7 @@ export default function Home() {
     <>
       <Title />
       <p style={{backgroundImage:'linear-gradient(to right, yellow,red)', color:'black'}}>i am a dog</p>
+      <a href="../">Next</a>
     </>
   )
 }

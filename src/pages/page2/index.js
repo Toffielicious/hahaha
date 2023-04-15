@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <>
       <Title />
-      
+      <a href="../../../page3">Next</a>
     </>
   )
 }

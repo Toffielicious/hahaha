@@ -12,6 +12,8 @@ export default function Home() {
       <Text messageko="ako to" />
 
       <p> huhuhu</p>
+
+      <a href="../../../page2">Next</a>
     </>
   )
 }

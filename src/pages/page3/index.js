@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <>
       <Title messageko="haaaaa" />
-      
+      <a href="../../../page4">Next</a>
     </>
   )
 }
