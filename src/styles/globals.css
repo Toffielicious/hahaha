@@ -5,6 +5,12 @@ p{
   font-size: 100px;
 }
 
+.btn{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  
+}
 body{
   display:flex;
   justify-content:center;
@@ -80,13 +86,14 @@ h2 span:nth-child(11){
 }
 
 a{
-  font-size: large;
+  font-size: 30px;
   border: solid 1px white;
   justify-content: center;
   display: flex;
   align-self: center;
   color: black;
   background-color: aquamarine;
+  
 } 
 
 a:hover{
@@ -95,4 +102,19 @@ a:hover{
   box-shadow: 0 0 1px cyan,
   0 0 2px cyan, 0 0 8px cyan,
   0 0 16px cyan, 0 0 32px cyan;
+}
+
+.calc:hover{
+  color: white;
+  background-color: cyan;
+  box-shadow: 0 0 1px cyan,
+  0 0 2px cyan, 0 0 8px cyan,
+  0 0 16px cyan, 0 0 32px cyan;
+}
+
+.result{
+  background-color: lightgreen;
+  box-shadow: 0 0 1px lightgreen,
+  0 0 2px lightgreen, 0 0 8px lightgreen,
+  0 0 16px lightgreen, 0 0 32px lightgreen;
 }
