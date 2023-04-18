@@ -2,7 +2,7 @@ import { Inter } from 'next/font/google'
 import Title from '@components/title/message2'
 import { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
+
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,16 +16,16 @@ const initialValues = {
 const validate = (values) => {
   const errors = {};
   if (!values.firstName) {
-    errors.firstName = "Required";
+    errors.firstName = "*";
   }
   if (!values.lastName) {
-    errors.lastName = "Required";
+    errors.lastName = "*";
   }
   if (!values.password) {
-    errors.password = "Required";
+    errors.password = "*";
   }
   if (!values.email) {
-    errors.email = "Required";
+    errors.email = "*";
   } else if (
     !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
   ) {
@@ -72,7 +72,7 @@ const FormsFormik = () => {
                 <Field type="email" name="email" placeholder='Mobile number or email' />
                 <ErrorMessage name="email" component="div" style={{ color: 'red' }} />
                 {/* <input type='password' placeholder='New password'></input> */}
-                <Field type="text" name="password" placeholder='New password' />
+                <Field type='password' name="password" placeholder='New password' />
                 <ErrorMessage name="password" component="div" style={{ color: 'red' }} />
               </div>
             </div>
@@ -169,7 +169,7 @@ const FormsFormik = () => {
                   <input type="radio" id="male"></input>
                 </div>
                 <div>
-                  <label for="custom">Custom</label>
+                  <label for="custom">Bading</label>
                   <input type="radio" id="custom"></input>
                 </div>
               </div>
