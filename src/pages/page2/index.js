@@ -69,10 +69,10 @@ const FormsFormik = () => {
               </div>
               <div class='bottom'>
                 {/* <input type='text' placeholder='Mobile number or email'></input> */}
-                <Field type="email" name="email" placeholder='Mobile number or email' />
-                <ErrorMessage name="email" component="div" style={{ color: 'red' }} />
+                <Field type="email" name="email"  placeholder='Mobile number or email' />
+                <ErrorMessage name="email"  component="div" style={{ color: 'red' }} />
                 {/* <input type='password' placeholder='New password'></input> */}
-                <Field type='password' name="password" placeholder='New password' />
+                <Field type='password'  name="password" placeholder='New password' />
                 <ErrorMessage name="password" component="div" style={{ color: 'red' }} />
               </div>
             </div>
