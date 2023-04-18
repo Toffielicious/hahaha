@@ -5,7 +5,7 @@ export default function App() {
     <>
         <div class="content">
           <div class="details">
-          <h2>
+          <h2 style={{fontSize:'5em'}}>
             <span>C</span>
             <span>H</span>
             <span>R</span>

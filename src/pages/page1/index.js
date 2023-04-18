@@ -28,7 +28,7 @@ export default function Home() {
 
   return (
     <>
-    <p class="result">{result}</p>
+    <p class="result" style={{fontSize:'100px'}}>{result}</p>
     <div>
       
       <input style={{ textAlign:'center', margin:'auto', display:'block'}} type="text" value={input} onChange={(e) => setInput(e.target.value)} />
