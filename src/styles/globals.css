@@ -15,8 +15,7 @@
 .top{
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 10px 18px;
+  padding: 1px 18px ;
 }
 
 .top>div>h2{
@@ -27,7 +26,7 @@
 
 .top>div>p{
   color: #606770;
-  line-height: 24px;
+  line-height: 0px;
   font-size: 15px;
   font-family: sans-serif;
 }
@@ -43,6 +42,13 @@
   padding: 10px;
   outline: none;
   width: 50%;
+  border: 1px solid #ccd0d5;
+}
+
+.num{
+  border: 1px solid #ccd0d5;
+  width: 80%;
+  width: "100%";
 }
 
 .name{
@@ -63,6 +69,7 @@
 .birthday{
   padding: 15px;
   padding-top: 0px;
+  line-height: 0px;
 }
 
 .birthday select{
@@ -79,10 +86,41 @@
   margin: 5px 0;
 }
 
+.pronoun{
+  display: block;
+  margin: 0 auto;
+  width: 93%;
+  margin-top: 15px;
+  text-align: start;
+  font-size: 15px;
+  color: black;
+  height: 35px;
+  border: 1px solid #ccd0d5;
+  border-color: #ccd0d5;
+  outline: none
+}
+
 .gender{
+    padding: 0 15px;
+    padding-top: -20px;
+}
+
+.male{
+  float: right;
+  margin-left: 10px;
+}
+
+.vis{
   padding: 0 15px;
   padding-top: -20px;
 }
+
+.person{
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
 
 .gender .person{
   display: flex;
@@ -115,6 +153,7 @@
 .text{
   font-size: 12px;
   font-family: sans-serif;
+  margin: 0;
 }
 
 .signin{
