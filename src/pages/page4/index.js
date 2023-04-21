@@ -1,85 +1,120 @@
-import React from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik"
+import { useState } from "react"
+import styles from '@styles/Home.module.css'
+import * as Yup from "yup"
 
-const initialValues = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  password: "",
-};
+const FormsFormik = () => {
+    const SignupSchema = Yup.object().shape({
+        firstName: Yup.string()
+            .min(2, "Too Short!")
+            .max(20, "Too Long!")
+            .required("First Name is required"),
+        lastName: Yup.string()
+            .min(2, "Too Short!")
+            .max(20, "Too Long!")
+            .required("Last Name is required"),
+        email: Yup.string()
+            .required("Mobile number or email is Required"),
+        password: Yup.string()
+            .required("Password is Required")
+            .min(6, "Too Short!")
+            .max(30, "Too Long!"),
+        date: Yup.date()
+            .required("Birthdate is required"),
+        pronouns: Yup.string()
+            .required("Select your pronoun.")
+    });
+    const [display, setDisplay] = useState()
+    return (
+        <div className={styles.formikContainer}>
+            <div className={styles.formContainer}>
+                <div className={styles.header}>
+                    <h1 style={{ color: 'black', fontFamily: 'Arial' }}>Sign Up</h1>
+                    <p style={{ color: 'grey', fontFamily: 'Arial', fontSize: '14px' }}>It's quick and easy.</p>
+                </div>
+                <Formik
+                    initialValues={{
+                        firstName: "",
+                        lastName: "",
+                        email: "",
+                        password: "",
+                        inputGender: "",
+                        date: "",
+                        pronouns: "",
+                    }}
+                    onSubmit={(values, actions) => {
+                        setDisplay(`I'm ${values?.firstName} ${values?.lastName}, my email is ${values?.email}. I was born on ${values?.date}. Gender: ${values?.gender}`);
+                        actions.resetForm({
+                            values: {
+                                firstName: "",
+                                lastName: "",
+                                email: "",
+                                password: "",
+                                date: "",
+                                gender: "",
+                                pronouns: "",
+                                inputGender: "",
+                            },
+                        })
+                    }}
+                    validationSchema={SignupSchema}
+                >
+                    {({ errors, touched, values }) => (
+                        <Form style={{ color: "blue" }}>
+                            <div className={styles.credentialsContainer}>
+                                <div className={styles.nameContainer}>
+                                    <Field id="firstName" name="firstName" placeholder="First Name" className={styles.name} />
+                                    <ErrorMessage name="firstName" />
+                                    <Field id="lastName" name="lastName" placeholder="Last Name" className={styles.name} />
+                                    <ErrorMessage name="lastName" />
+                                </div>
+                                <Field id="email" name="email" placeholder="Mobile number or email" className={styles.emailPass} />
+                                <ErrorMessage name="email" />
+                                <Field id="password" name="password" placeholder="New password" className={styles.emailPass} />
+                                <ErrorMessage name="password" />
+                                <p style={{ color: 'grey', fontFamily: 'Arial', fontSize: '12px', marginBottom: '5px' }}>Birthday</p>
+                                <Field id="date" name="date" type="date" className={styles.datePicker} />
+                                <ErrorMessage name="date" />
+                                <p style={{ color: 'grey', fontFamily: 'Arial', fontSize: '12px', marginBottom: '5px' }}>Gender</p>
+                                <div className={styles.radioButtonsContainer}>
+                                    <div className={styles.radioButtons}>
+                                        <label htmlFor="male">Male</label>
+                                        <Field type="radio" id="male" name="gender" value="Male" />
+                                    </div>
+                                    <div className={styles.radioButtons}>
+                                        <label htmlFor="female">Female</label>
+                                        <Field type="radio" id="female" name="gender" value="Female" />
+                                    </div>
+                                    <div className={styles.radioButtons}>
+                                        <label htmlFor="custom">Custom</label>
+                                        <Field type="radio" id="custom" name="gender" value="Custom" />
+                                    </div>
+                                </div>
+                                {values?.gender == "Custom" && (
+                                    <div className={styles.pronounsContainer}>
+                                        <Field id="pronouns" name="pronouns" placeholder="Select your pronoun" as="select" className={styles.pronouns}>
+                                            <option value="" default>Select your pronoun</option>
+                                            <option value="She">She: "Wish her a happy birthday!"</option>
+                                            <option value="He">He: "Wish him a happy birthday!"</option>
+                                            <option value="They">Them: "Wish them a happy birthday!"</option>
+                                        </Field>
+                                        {/* <ErrorMessage name="pronouns" /> */}
+                                        <p style={{ color: 'grey', fontFamily: 'Arial', fontSize: '12px', marginBottom: '10px' }}>Your pronoun is visible to everyone.</p>
+                                        <Field id="gender" name="inputGender" placeholder="Gender (Optional)" className={styles.emailPass} />
+                                    </div>
+                                )}  
+                                <p style={{ color: 'grey', fontFamily: 'Arial', fontSize: '11px', marginBottom: '10px' }}>People who use our service may have uploaded your contact information to Facebook. Learn more.<br /><br />By clicking Sign Up, you agree to our Terms, Privacy Policy and Cookies Policy. You may receive SMS Notifications from us and can opt out any time.</p>
+                                <div className={styles.submitBtnContainer}>
+                                    <button type="submit" className={styles.submitButton}>Sign Up</button>
+                                </div>
+                                <p>{display}</p>
+                            </div>
+                        </Form>
+                    )}
+                </Formik>
+            </div>
+        </div >
+    )
+}
 
-const validate = (values) => {
-  const errors = {};
-  if (!values.firstName) {
-    errors.firstName = "Required";
-  }
-  if (!values.lastName) {
-    errors.lastName = "Required";
-  }
-  if (!values.password) {
-    errors.password = "Required";
-  }
-  if (!values.email) {
-    errors.email = "Required";
-  } else if (
-    !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-  ) {
-    errors.email = "Invalid email address";
-  }
-  return errors;
-};
-
-const onSubmit = (values, { setSubmitting }) => {
-  setTimeout(() => {
-    alert(JSON.stringify(values, null, 2));
-    setSubmitting(false);
-  }, 400);
-};
-
-const App = () => (
-  <>
-  <Formik
-    initialValues={initialValues}
-    validate={validate}
-    onSubmit={onSubmit}
-  >
-    {({ isSubmitting }) => (
-      
-      <Form>
-        <div>
-        <div>
-          <label htmlFor="firstName">First Name</label>
-          <Field type="text" name="firstName" />
-          <ErrorMessage name="firstName" component="div" />
-        </div>
-        <div>
-          <label htmlFor="lastName">Last Name</label>
-          <Field type="text" name="lastName" />
-          <ErrorMessage name="lastName" component="div" />
-        </div>
-        <div>
-          <label htmlFor="email">Email</label>
-          <Field type="email" name="email" />
-          <ErrorMessage name="email" component="div" />
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <Field type="text" name="password" />
-          <ErrorMessage name="password" component="div" />
-        </div>
-        <button type="submit" disabled={isSubmitting}>
-          Submit
-        </button>
-        </div>
-      </Form>
-      
-      
-    )}
-  </Formik>
-  <a href="../../../page4">Next</a>
-  <br />
-  <a href="../../../page2">Back</a>
-  </>
-);
-
-export default App;
+export default FormsFormik

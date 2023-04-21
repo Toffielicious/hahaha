@@ -1,194 +1,421 @@
-import { Inter } from 'next/font/google'
-import Title from '@components/title/message2'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import axios from "axios";
 
+const styles = {
+    container: {
+        backgroundColor: "whitesmoke",
+        width: "98%",
+        height: "100%",
+        borderRadius: "5px",
+        paddingBottom: "10px",
+    },
 
-const inter = Inter({ subsets: ['latin'] })
+    label: {
+        padding: "5px",
+        fontSize: "12px",
+        fontFamily:"SFProText-Medium, Helvetica, Arial, sans-serif",
+    },
 
-const initialValues = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  password: "",
-};
+    radioLabel: {
+      border: "black",
+      borderWidth: "1px",
+      padding: "5px",
+      marginBottom: "5px",
+      borderStyle: "solid",
+      borderRadius:"5px",
+      boxSizing: "border-box",
+      color: "#1c1e21",
+      display: "inline-block",
+      fontSize: "15px",
+      fontFamily: "SFProDisplay-Regular, Helvetica, Arial, sans-serif",
+      lineHeight: "36px",
+      padding: "0 28px 0 10px",
+      width: "100%",
+      margin: "5px",
+      backgroundColor:"lightgray"
+  },
 
-const validate = (values) => {
-  const errors = {};
-  if (!values.firstName) {
-    errors.firstName = "*";
-  }
-  if (!values.lastName) {
-    errors.lastName = "*";
-  }
-  if (!values.password) {
-    errors.password = "*";
-  }
-  if (!values.email) {
-    errors.email = "*";
-  } else if (
-    !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-  ) {
-    errors.email = "Invalid email address";
-  }
-  return errors;
-};
+    option: {
+      width: "100%",
+      height: "40px",
+      fontSize: "14px",
+      padding: "5px",
+      margin: "5px",
+      color: "black",
+      borderRadius: "5px",
+      backgroundColor: "lightgray",
+    },
 
-const onSubmit = (values, { setSubmitting }) => {
-  setTimeout(() => {
-    alert(JSON.stringify(values, null, 2));
-    setSubmitting(false);
-  }, 400);
-};
+    radioButton: {
+        border: "2px",
+        appearance: "auto",
+        borderRadius: "5px",
+    },
+    
+    input: {
+      width: "100%",
+      height: "40px",
+      fontFamily: "SFProDisplay-Regular, Helvetica, Arial, sans-serif",
+      fontSize: "18px",
+      padding: "5px",
+      margin: "5px",
+      color: "black",
+      borderRadius: "5px",
+      backgroundColor: "lightgray",
+    },
+    p: {
+        fontSize: "10px",
+        paddingLeft: "7px",
+        fontFamily: "SFProDisplay-Regular, Helvetica, Arial, sans-serif",
+    },
+    p2: {
+        fontSize: "10px",
+        paddingLeft: "7px",
+        paddingTop: "5px",
+        paddingBottom: "10px",
+        fontFamily: "SFProDisplay-Regular, Helvetica, Arial, sans-serif",
+    },
+    signUpButton: {
+        width: "40%",
+        height: "40px",
+        fontSize: "14px",
+        fontFamily: "SFProDisplay-Regular, Helvetica, Arial, sans-serif",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        margin: "auto",
+        backgroundColor: "green",
+        borderRadius: "5px",
+    },
+  }  
+
+  
+
+  // const patchPosts = (passValue) => {
+  //   console.log("passValue == ", passValue);
+  //   axios
+  //     .patch(`${api}/posts/1`, {
+  //       id	: passValue?.id,
+  //       firstName: passValue?.firstName,
+  //       lastName: passValue?.lastName,
+  //       emailNum: passValue?.emailNum,
+  //       password: passValue?.password,
+  //       month: passValue?.month,
+  //       day: passValue?.day,
+  //       year: passValue?.year,
+  //       gender: passValue?.gender,
+  //       pronoun: passValue?.pronoun,
+  //       customGender: passValue?.customGender,
+  //       // body: passValue?.body, --> include one key only for PUT
+  //     })
+  //     .then(function (response) {
+  //       setPatchStatus(response?.status);
+  //     });
+  // };
+
+  // const deletePosts = (passValue) => {
+  //   axios.delete(`${api}/posts/${passValue?.id}`).then(function (response) {
+  //     setDeleteStatus(response?.status);
+  //   });
+  // };
+
 
 const FormsFormik = () => {
+    const api = "https://api.ahglab.com/api:W7k9W8HQ/users";
+    const [data, setData] = useState();
+    const [postStatus, setPostStatus] = useState();
+    const [patchStatus, setPatchStatus] = useState();
+    const [deleteStatus, setDeleteStatus] = useState();
 
-  return (
-    <div>
+    
+  const SignupSchema = Yup.object().shape({
+    firstName: Yup.string()
+      .min(2, "Too Short!")
+      .max(70, "Too Long!")
+      .required("First Name is Required"),
+    lastName: Yup.string()
+      .min(2, "Too Short!")
+      .max(70, "Too Long!")
+      .required("Last Name is Required"),
+    emailNum: Yup.string()
+        .required("Email is Required"),
+    password: Yup.string()
+        .min(8, "Too Short!")
+        .max(50, "Too Long!")
+        .required("Password is Required"),
+    month: Yup.string()
+        .required("Month is required"),
+    day: Yup.string()
+        .required("Day is required"),
+    year: Yup.string()
+        .required("Year is required"),
+    gender: Yup.string()
+        .required("Gender is required"),
+  });
 
-      <Formik
-        initialValues={initialValues}
-        validate={validate}
-        onSubmit={onSubmit}
-      >
-        {({ isSubmitting }) => (<div class='signup'>
-          <div class="top">
+  const pronoun = [
+    { value: "She", label: "She: 'We wish her a happy birthday!'"},
+    { value: "He", label: "He: 'We wish him a happy birthday!'"},
+    { value: "They", label: "They: 'We wish them a happy birthday!'"},
+  ];
+
+  const months = [
+    { value: "01", label: "January" },
+    { value: "02", label: "February" },
+    { value: "03", label: "March" },
+    { value: "04", label: "April" },
+    { value: "05", label: "May" },
+    { value: "06", label: "June" },
+    { value: "07", label: "July" },
+    { value: "08", label: "August" },
+    { value: "09", label: "September" },
+    { value: "10", label: "October" },
+    { value: "11", label: "November" },
+    { value: "12", label: "December" },
+  ];
+  
+  const days = Array.from({ length: 31 }, (_, i) => {
+    const day = i + 1;
+    return {
+      value: day.toString().padStart(2, "0"),
+      label: day.toString(),
+    };
+  });
+  
+  const years = Array.from({ length: 100 }, (_, i) => {
+    const year = new Date().getFullYear() - i;
+    return { value: year.toString(), label: year.toString() };
+  });
+  
+
+  const [display, setDisplay] = useState();
+      
+    const getPosts = () => {
+          axios.get(`${api}`).then(function (response) {
+            setData(response?.data);
+          });
+        };
+        useEffect(() => {
+            getPosts();
+          }, []);
+          console.log(data)
+
+        const postPosts = (passValue) => {
+            console.log("passValue == ", passValue);
+            axios
+              .post(`${api}`, {
+                id	: passValue?.id,
+                firstName: passValue?.firstName,
+                lastName: passValue?.lastName,
+                emailNum: passValue?.emailNum,
+                password: passValue?.password,
+                month: passValue?.month,
+                day: passValue?.day,
+                year: passValue?.year,
+                gender: passValue?.gender,
+                customGender: passValue?.customGender,
+                pronoun: passValue?.pronoun,
+              })
+              .then(function (response) {
+                setPostStatus(response?.status);
+                // console.log(response);
+              });
+
+                // const patchPosts = (passValue) => {
+                //   console.log("passValue == ", passValue);
+                //   axios
+                //     .patch(`${api}/posts/1`, {
+                //       id	: passValue?.id,
+                //       firstName: passValue?.firstName,
+                //       lastName: passValue?.lastName,
+                //       emailNum: passValue?.emailNum,
+                //       password: passValue?.password,
+                //       month: passValue?.month,
+                //       day: passValue?.day,
+                //       year: passValue?.year,
+                //       gender: passValue?.gender,
+                //       pronoun: passValue?.pronoun,
+                //       customGender: passValue?.customGender,
+                //       // body: passValue?.body, --> include one key only for PUT
+                //     })
+                //     .then(function (response) {
+                //       setPatchStatus(response?.status);
+                //     });
+                // };
+
+                // const deletePosts = (passValue) => {
+                //   axios.delete(`${api}/posts/${passValue?.id}`).then(function (response) {
+                //     setDeleteStatus(response?.status);
+                //   });
+                // };
+          };
+          
+          return (
+            <div className="screen" style={styles.container}>
+              <Formik
+                initialValues={{
+                  firstName: "",
+                  lastName: "",
+                  emailNum: "",
+                  password: "",
+                  month: "",
+                  day: "",
+                  year: "",
+                  gender: "",
+                  pronoun: "",
+                  customGender: "",
+                }}
+                validationSchema={SignupSchema}
+                onSubmit={(values, actions) => {
+                  postPosts(values);
+                  setDisplay(
+                  `Name: ${values.firstName} ${values.lastName} Email/Number: ${values.emailNum} Password: ${values.password} Birthday: ${values.month}/${values.day}/${values.year} \n Gender: ${values.gender } ${values.pronoun} ${values.customGender}`
+                    );
+                    actions.resetForm({
+                      values:{
+                        firstName: "",
+                        lastName: "",
+                        emailNum: "",
+                        password: "",
+                        month: "",
+                        day: "",
+                        year: "",
+                        gender: "",
+                        pronoun: "",
+                        customGender: "",
+                      },
+                    })
+                }}        
+              >
+        {({ errors, touched, values }) => (
+            <Form>
+            <div style={{ display: "flex", flexDirection: "row" }}>
+                <div style={{ width: "50%" }}>
+                <Field style={styles.input} id="firstName" name="firstName" placeholder="First Name" />
+                <ErrorMessage style={{ color: "red" }} name="firstName" />
+                </div>
+                <div style={{ width: "50%" }}>
+                    <Field style={styles.input} id="lastName" name="lastName" placeholder="Last Name" />
+                <ErrorMessage name="lastName" />
+            </div>  
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column" }}>
+                <Field style={styles.input} type="email" id="emailNum" name="emailNum" placeholder="Mobile number or email" />
+                <ErrorMessage name="emailNum" />
+                <Field style={styles.input} type="password" id="password" name="password" placeholder="New password" />
+                <ErrorMessage name="password" /> 
+
+            <label style={styles.label} htmlFor="birthday">Birthday </label>
+            <div style={{ display: "flex", flexDirection: "row" }}>
+                <div style={{ width: "33.33%" }}>
+                    <Field style={styles.option} as="select" name="month" id="month">
+                        <option  value="">Select month</option>
+                        {months.map((month) => (
+                        <option key={month.value} value={month.value}>
+                            {month.label}
+                        </option>
+                        ))}
+                    </Field>
+                    <ErrorMessage name="month" />
+                </div>
+
+            <div style={{ width: "33.33%" }}>
+                <Field style={styles.option}  as="select" name="day" id="day">
+                    <option value="">Select day</option>
+                    {days.map((day) => (
+                    <option key={day.value} value={day.value}>
+                        {day.label}
+                    </option>
+                    ))}
+                </Field>
+                <ErrorMessage name="day" />
+            </div>
+            <div style={{ width: "33.33%" }}>
+            <Field style={styles.option} as="select" name="year" id="year">
+                <option   value="">Select year</option>
+                {years.map((year) => (
+                <option key={year.value} value={year.value}>
+                    {year.label}
+                </option>
+                ))}
+            </Field>
+            <ErrorMessage name="year" />
+            </div>
+            </div>
+
+            <label style={styles.label} htmlFor="gender">Gender </label>
             <div>
-              <h2>Sign Up</h2>
-              <p style={{ paddingTop: '0px' }}>It's quick and easy</p>
+            <div style={{ display: "flex", flexDirection: "row" }}>
+            <div style={{ width: "33.33%" }}>
+                <label style={styles.radioLabel}  htmlFor="male">
+                Male
+                <Field style={styles.radio} type="radio" name="gender" id="male" value="male" />
+                </label>
             </div>
-          </div>
-
-          <Form>
-            <div class="signup_body">
-              <div class='name'>
-                <Field type="text" name="firstName" placeholder="First name" class="same" />
-                <ErrorMessage name="firstName" component="div" style={{ color: 'red' }} />
-                <Field type="text" name="lastName" placeholder="Last name" class="same" />
-                <ErrorMessage name="lastName" component="div" style={{ color: 'red' }} />
-              </div>
-              <div class='bottom'>
-                {/* <input type='text' placeholder='Mobile number or email'></input> */}
-                <Field type="email" name="email"  placeholder='Mobile number or email' />
-                <ErrorMessage name="email"  component="div" style={{ color: 'red' }} />
-                {/* <input type='password' placeholder='New password'></input> */}
-                <Field type='password'  name="password" placeholder='New password' />
-                <ErrorMessage name="password" component="div" style={{ color: 'red' }} />
-              </div>
+            
+            <div style={{ width: "33.33%" }}>
+            <label style={styles.radioLabel} htmlFor="female">
+                Female
+                <Field type="radio" name="gender" id="female" value="female" />
+                </label>
             </div>
-            <div class="birthday">
-              <p class="text">Birthday</p>
-              <div class='date'>
-                <select name="" id="">
-                  <option name="Jan">Jan</option>
-                  <option name="Feb">Feb</option>
-                  <option name="Mar">Mar</option>
-                  <option name="Apr">Apr</option>
-                  <option name="May">May</option>
-                  <option name="Jun">Jun</option>
-                  <option name="Jul">Jul</option>
-                  <option name="Aug">Aug</option>
-                  <option name="Sep">Sep</option>
-                  <option name="Oct">Oct</option>
-                  <option name="Nov">Nov</option>
-                  <option name="Dec">Dec</option>
-                </select>
-                <select>
-                  <option name="">1</option>
-                  <option name="">2</option>
-                  <option name="">3</option>
-                  <option name="">4</option>
-                  <option name="">5</option>
-                  <option name="">6</option>
-                  <option name="">7</option>
-                  <option name="">8</option>
-                  <option name="">9</option>
-                  <option name="">10</option>
-                  <option name="">11</option>
-                  <option name="">12</option>
-                  <option name="">12</option>
-                  <option name="">13</option>
-                  <option name="">14</option>
-                  <option name="">15</option>
-                  <option name="">16</option>
-                  <option name="">17</option>
-                  <option name="">18</option>
-                  <option name="">19</option>
-                  <option name="">20</option>
-                  <option name="">21</option>
-                  <option name="">23</option>
-                  <option name="">24</option>
-                  <option name="">25</option>
-                  <option name="">26</option>
-                  <option name="">27</option>
-                  <option name="">27</option>
-                  <option name="">28</option>
-                  <option name="">29</option>
-                  <option name="">30</option>
-                  <option name="">31</option>
-                </select>
-                <select>
-                  <option name="">1999</option>
-                  <option name="">2000</option>
-                  <option name="">2001</option>
-                  <option name="">2002</option>
-                  <option name="">2003</option>
-                  <option name="">2004</option>
-                  <option name="">2005</option>
-                  <option name="">2006</option>
-                  <option name="">2007</option>
-                  <option name="">2008</option>
-                  <option name="">2009</option>
-                  <option name="">2010</option>
-                  <option name="">2011</option>
-                  <option name="">2012</option>
-                  <option name="">2013</option>
-                  <option name="">2014</option>
-                  <option name="">2015</option>
-                  <option name="">2016</option>
-                  <option name="">2016</option>
-                  <option name="">2017</option>
-                  <option name="">2018</option>
-                  <option name="">2019</option>
-                  <option name="">2020</option>
-                  <option name="">2021</option>
-                  <option name="">2022</option>
-                  <option name="">2023</option>
-                </select>
-              </div>
-            </div>
-            <div class="gender">
-              <p class="text">Gender</p>
-              <div class="person">
-                <div>
-                  <label for="female">Female</label>
-                  <input type="radio" id="female"></input>
+            <div style={{ width: "33.33%" }}>
+            <label style={styles.radioLabel} htmlFor="custom">
+                Custom
+                <Field type="radio" name="gender" id="custom" value="custom" />
+                </label>
+                <ErrorMessage name="gender" />
                 </div>
-                <div>
-                  <label for="male">Male</label>
-                  <input type="radio" id="male"></input>
-                </div>
-                <div>
-                  <label for="custom">Bading</label>
-                  <input type="radio" id="custom"></input>
-                </div>
-              </div>
             </div>
+        </div>
+                {values?.gender == "custom" && (
+                <div>
+                    <Field style={styles.input} as="select" id="pronoun" name="pronoun" placeholder="Select your pronoun" >
+                    <option value="">Select your pronoun</option>
+                    {pronoun.map((pronoun) => (
+                    <option key={pronoun.value} value={pronoun.value}>
+                        {pronoun.label}
+                    </option>
+                    ))}
+                    </Field>
+                    <ErrorMessage name="pronoun" />
+                    <Field style={styles.input} id="customGender" name="customGender" placeholder="Gender (optional)" />
+                    
+                </div>
+                )}
+        </div>
 
-            <div class='content'>
-              <p>People who use our service may have uploaded your contact information to Facebook. <span class="blue">Learn more</span></p>
-              <p>By clicking Sign Up, you agree to our Terms, <span class="blue">Privacy Policy and Cookies Policy</span>. You may receive SMS Notifications from us and can opt out any time.</p>
-            </div>
-            <button disabled={isSubmitting} class="signin" type='submit'>sign up</button>
-
-          </Form>
-        </div>)}
+            <p style={styles.p}>People who use our service may have uploaded your contact information to Facebook. Learn more.</p>
+            <p style={styles.p2}>By clicking Sign Up, you agree to our Terms, Privacy Policy and Cookies Policy. You may receive SMS Notifications from us and can opt out any time</p>
+            <button style={styles.signUpButton} type="submit">Sign Up</button>
+            <br></br>
+            <p style={styles.p}>{display}</p>
+            <p>
+                Status:{" "}
+                {postStatus === 200 ? (
+                  <span style={{ color: "green" }}>Success</span>
+                ) : postStatus === 500 ? (
+                  <span style={{ color: "red" }}>Failed</span>
+                ) : (
+                  "N/A"
+                )}
+              </p>
+              <p>GET</p>
+                {/* {data &&
+                  data.splice(0, 10).map((value, key) => {
+                    return (
+                      // <p>
+                      //   {key}: {value?.firstName}
+                      // </p>
+                    );
+                  })} */}
+            </Form>
+        )}
       </Formik>
-
-      <a style={{ marginTop: '700px', width: '150px' }} href="../../../page3">Next</a>
-
     </div>
-
   );
 };
 

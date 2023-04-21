@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ['latin'] })
 export default function Home() {
   return (
     <>
-      <img src='dp.jpg' style={{width:'250px', height:'250px', display:'block', marginLeft:'auto', marginRight:'auto' }} />
+      <img src='dp.jpg' style={{width:'250px', height:'250px', display:'block', marginLeft:'auto', marginRight:'auto' }} alt="" />
       <Title />
 
 

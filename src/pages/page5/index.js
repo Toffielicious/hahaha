@@ -14,6 +14,10 @@ const initialValues = {
   password: "",
 };
 
+
+// let error;
+// const emailRegex = /\S+@\S+\.\S+/;
+// const mobileRegex = /^[1-9][0-9]{9}$/;
 const validate = (values) => {
   const errors = {};
   if (!values.firstName) {
@@ -27,17 +31,21 @@ const validate = (values) => {
   }
   if (!values.email) {
     errors.email = "*";
-  } else if (
+  } 
+  else if (
     !/^[A-Z0-9._-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
   ) {
     errors.email = "Invalid email address";
   }
+  // else if(!/^[0-9]{9,}$/.test(values.email)){
+  //   errors.email = "Invalid number";
+  // }
   return errors;
 };
 
 const onSubmit = (values, { setSubmitting }) => {
   setTimeout(() => {
-    alert(JSON.stringify(values, null, 2));
+    `I'm ${values?.firstName} ${values?.lastName} and I'm ${values?.age} years old`;
     setSubmitting(false);
   }, 400);
 };
@@ -150,14 +158,15 @@ const FormsFormik = () => {
                   <option value="They">Them: "Wish them a happy birthday!"</option>
                 </Field>
                 <p style={{ color: 'grey', fontFamily: 'Arial', fontSize: '12px', marginBottom: '10px' }}>Your pronoun is visible to everyone.</p>
-                <Field type="email" name="email" placeholder='Gender (Optional)' />
+                {/* <Field type="email" name="email" placeholder='Gender (Optional)' /> */}
               </div>
 
               <div class='content'>
                 <p>People who use our service may have uploaded your contact information to Facebook. <span class="blue">Learn more</span></p>
                 <p>By clicking Sign Up, you agree to our Terms, <span class="blue">Privacy Policy and Cookies Policy</span>. You may receive SMS Notifications from us and can opt out any time.</p>
               </div>
-              <button disabled={isSubmitting} class="signin" type='submit'>sign up</button>
+              {/* disabled={isSubmitting} */}
+              <button  class="signin" type='submit'>sign up</button>
 
             </Form>
           </div>)}
