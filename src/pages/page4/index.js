@@ -335,13 +335,14 @@ const FormsFormik = () => {
             </Formik>
 
             <section>
-                <a style={{ marginTop: '700px', width: '150px' }} href="../../../page3">Next</a>
+                <a style={{ marginTop: '700px', }} href="../../../page3">Back</a>
+                <p style={{textAlign:'center', fontSize:'30px', }}>KUNIN AT IBAHIN</p>
+                
+                <p style={{left:'10px'}} id="userData"></p>
             </section>
 
             <div>
-                <p style={{ textAlign: 'center' }}>KUNIN AT TANGGAPIN</p>
-                
-                <p id="userData"></p>
+            
             </div>
 
         </div>

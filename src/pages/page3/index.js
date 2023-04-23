@@ -376,8 +376,8 @@ const FormsFormik = () => {
         </Formik>
 
         <section style={{marginTop: '700px'}}>
-          <a style={{ marginTop: '700px', width: '150px' }} href="../../../page4">Next</a>
-
+          <a style={{ marginTop: '700px',  }} href="../../../page4">Next</a>
+          <p style={{textAlign:'center', fontSize:'30px' }}>KUNIN AT ALISIN</p>
           {data.map((user) => (
               <tr key={user.id}>
                 <td>{user.last_name}</td>

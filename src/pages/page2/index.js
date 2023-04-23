@@ -330,11 +330,11 @@ const FormsFormik = () => {
         </Formik>
 
         <section>
-          <a style={{ marginTop: '700px', width: '150px' }} href="../../../page3">Next</a>
+          <a style={{ marginTop: '700px', }} href="../../../page3">Next</a>
         </section>
 
-        <div>
-          <p style={{textAlign:'center'}}>KUNIN AT TANGGAPIN</p>
+        <div style={{}}>
+          <p style={{textAlign:'center', fontSize:'30px' }}>KUNIN AT TANGGAPIN</p>
           {data.map((user) => (
               <tr key={user.id}>
                 <td>{user.last_name}</td>
